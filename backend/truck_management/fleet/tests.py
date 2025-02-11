@@ -64,7 +64,7 @@ class AssignmentModelTestCase(TestCase):
         assignment1.clean()
         assignment1.save()
         
-        # Create a new truck that driver1 is eligible for (e.g., minimum_license_required 'B')
+        # Create a new truck that driver1 is eligible for
         truck3 = Truck.objects.create(plate="DEF-456", minimum_license_required="B")
     
         # Attempt a second assignment for truck1 on the same date with a different driver.
