@@ -19,7 +19,6 @@ and a React-based front end.
   # main folder
   cd loadsmart_tech_challenge
   ```
----
 
 2. **Create a virtual environment and activate it:**
 
@@ -32,7 +31,6 @@ and a React-based front end.
   # PowerShell (Windows)
   venv\Scripts\activate
 ```
----
   
 3. **Install dependencies:**
 ```bash
@@ -40,7 +38,6 @@ and a React-based front end.
   cd backend
   pip install -r requirements.txt
 ```
----
   
 4. **Create a .env file in the backend folder:**
 ```ini
@@ -49,7 +46,6 @@ and a React-based front end.
   SECRET_KEY=your-secret-key
   ALLOWED_HOSTS=localhost,127.0.0.1
 ```
----
   
 5. **Run migrations:**
 ```bash 
@@ -57,13 +53,11 @@ and a React-based front end.
   python manage.py makemigrations
   python manage.py migrate
 ```
----
 
 6. **Create a superuser:**
 ```bash 
   python manage.py createsuperuser
 ```
----
 
 7. **Populate the DB with Sample Data:**
 ```bash 
@@ -71,7 +65,6 @@ and a React-based front end.
   # You can tweek with the drivers and trucks values as you like
   python manage.py seed_db --drivers 20 --trucks 10
 ```
----
 
 8. **Run the development server:**
 ```bash 
