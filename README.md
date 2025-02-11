@@ -19,7 +19,6 @@ and a React-based front end.
   # main folder
   cd loadsmart_tech_challenge
   ```
----
 
 2. **Create a virtual environment and activate it:**
 
@@ -32,7 +31,6 @@ and a React-based front end.
   # PowerShell (Windows)
   venv\Scripts\activate
 ```
----
   
 3. **Install dependencies:**
 ```bash
