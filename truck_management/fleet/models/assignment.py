@@ -3,6 +3,13 @@ from django.core.exceptions import ValidationError
 
 
 class Assignment(models.Model):
+    """
+    Represents an assignment of a driver to a truck on a given date.
+    
+    This model ensures:
+      - The driver's license is compatible with the truck's required minimum license.
+      - A driver or truck is not double-booked on the same date.
+    """
     LICENSE_LEVELS = {
         'A': 1,
         'B': 2,
@@ -29,8 +36,9 @@ class Assignment(models.Model):
     ################## Class Methods ##################
     def clean(self):
         """
-        - validate license compatibility.
-        - ensure a driver and a truck are not double-booked on the same date.
+        - checks that the driver's license level meets or exceeds the truck's required license level.
+        - ensures that the driver is not assigned to more than one truck on the same date.
+        - ensures that the truck is not assigned to more than one driver on the same date.
         """
         driver_license_level = self.LICENSE_LEVELS.get(self.driver.license_type)
         truck_license_level = self.LICENSE_LEVELS.get(self.truck.minimum_license_required)
@@ -45,7 +53,9 @@ class Assignment(models.Model):
             raise ValidationError("This truck is already assigned on this date.")
 
     def save(self, *args, **kwargs):
-        # call clean on save() to ensure validations
+        """
+        Overrides the save method to run validations before saving.
+        """
         self.clean()
         super().save(*args, **kwargs)
 
@@ -53,7 +63,10 @@ class Assignment(models.Model):
         return f"{self.driver} assigned to {self.truck} on {self.date}"
 
     class Meta:
-        # Extra layer of protection at the database level.
+        """
+        Defines unique constraints to enforce that a driver or a truck cannot 
+        have multiple assignments on the same date.
+        """
         constraints = [
             models.UniqueConstraint(fields=['driver', 'date'], name='unique_driver_date'),
             models.UniqueConstraint(fields=['truck', 'date'], name='unique_truck_date'),
