@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.core.exceptions import ValidationError
 
 
@@ -46,11 +47,18 @@ class Assignment(models.Model):
         if driver_license_level < truck_license_level:
             raise ValidationError("Driver's license type is not sufficient for the truck.")
 
-        if Assignment.objects.exclude(pk=self.pk).filter(driver=self.driver, date=self.date).exists():
-            raise ValidationError("This driver is already assigned on this date.")
-
-        if Assignment.objects.exclude(pk=self.pk).filter(truck=self.truck, date=self.date).exists():
-            raise ValidationError("This truck is already assigned on this date.")
+        conflicts = Assignment.objects.exclude(pk=self.pk).filter(
+            date=self.date
+        ).filter(
+            Q(driver=self.driver) | Q(truck=self.truck)
+        )
+    
+        # iterate over the conflicting assignments and raise errors
+        for conflict in conflicts:
+            if conflict.driver == self.driver:
+                raise ValidationError("This driver is already assigned on this date.")
+            if conflict.truck == self.truck:
+                raise ValidationError("This truck is already assigned on this date.")
 
     def save(self, *args, **kwargs):
         """

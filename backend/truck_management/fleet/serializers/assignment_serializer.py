@@ -39,6 +39,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         # check that the driver is not assigned to another truck on the same date.
         qs_driver = Assignment.objects.filter(driver=driver, date=assignment_date)
         if self.instance:
+            # prevents the serializer from comparing the record against itself
             qs_driver = qs_driver.exclude(pk=self.instance.pk)
         if qs_driver.exists():
             raise serializers.ValidationError("This driver is already assigned on this date.")
