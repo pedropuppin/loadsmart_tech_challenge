@@ -4,13 +4,15 @@ import Layout from './components/layout';
 import { ThemeProvider } from "@/components/theme-provider"
 
 // Import pages
-import DriverList from './pages/drivers/driverList';
-import TruckList from './pages/trucks/truckList';
-import AssignmentList from './pages/assignments/assignmentList';
-import Dashboard from './pages/dashboard/dashboard';
-import DriverForm from './pages/drivers/driverForm';
-import TruckForm from './pages/trucks/truckForm';
-import AssignmentForm from './pages/assignments/assignmentForm';
+import DriverList from '@/pages/drivers/driverList';
+import TruckList from '@/pages/trucks/truckList';
+import AssignmentList from '@/pages/assignments/assignmentList';
+import Dashboard from '@/pages/dashboard/dashboard';
+import DriverForm from '@/pages/drivers/driverForm';
+import TruckForm from '@/pages/trucks/truckForm';
+import AssignmentForm from '@/pages/assignments/assignmentForm';
+import DriverFormWrapper from '@/pages/drivers/driverFormWrapper'
+import TruckFormWrapper from '@/pages/trucks/truckFormWrapper'
 
 const App: React.FC = () => {
   return (
@@ -25,6 +27,8 @@ const App: React.FC = () => {
             <Route path="/assignments/new" element={<AssignmentForm />} />
             <Route path="/drivers/new" element={<DriverForm />} />
             <Route path="/trucks/new" element={<TruckForm />} />
+            <Route path="/driver/edit/:id" element={<DriverFormWrapper />} />        
+            <Route path="/truck/edit/:id" element={<TruckFormWrapper />} />        
           </Route>
         </Routes>
       </BrowserRouter>

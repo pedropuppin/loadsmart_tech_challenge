@@ -2,38 +2,10 @@ import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { Assignment, PaginatedResponse } from "@/types"
 import { Link } from 'react-router-dom';
+import AssignmentCard from '@/components/cards/assignmentCard';
+import PaginationWrapper from "@/components/paginationWrapper";
 import { Button } from '../../components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription
-} from "@/components/ui/card"
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationEllipsis,
-} from "@/components/ui/pagination"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { toast } from "sonner"
-import { Badge } from "@/components/ui/badge"
-import { Truck, User, Calendar, Trash } from "lucide-react"
-import { getPagesToShow } from "@/utils/pagination"
 
 const PAGE_SIZE = 15
 
@@ -63,9 +35,6 @@ const AssignmentList: React.FC = () => {
       setPage(targetPage)
     }
   }
-
-  // Compute which pages to display (with ellipses)
-  const pagesToShow = getPagesToShow(page, totalPages)
   
   const handleDelete = async (assignmentId: number) => {
     try {
@@ -93,116 +62,18 @@ const AssignmentList: React.FC = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-        {assignments.map(assignment => (
-          <Card
-            key={assignment.id}
-            className="shadow-sm transition-all hover:shadow-md hover:bg-secondary/10"
-          >
-            <CardHeader className="flex justify-between flex-row space-y-0 items-center">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-semibold">{assignment.driver_detail.name}</span>
-                  <Badge variant="secondary">
-                    {assignment.driver_detail.license_type}
-                  </Badge>
-                </CardTitle>
-                <CardDescription className="flex items-center gap-2 mt-2">
-                  <Truck className="w-4 h-4 text-muted-foreground" />
-                  <span>{assignment.truck_detail.plate}</span>
-                </CardDescription>
-              </div>
-              <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="ghost" className="text-red-500 p-2">
-                      <Trash className="w-4 h-4" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete 
-                        this assignment ({assignment.driver_detail.name} - {assignment.date}).
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => handleDelete(assignment.id)}
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-            </CardHeader>
-            <CardContent className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-muted-foreground" />
-              <Badge variant="outline" className="font-light">
-                {assignment.date}
-              </Badge>
-            </CardContent>
-          </Card>
+        {assignments.map((assignment) => (
+          <AssignmentCard key={assignment.id} assignment={assignment} onDelete={handleDelete} />
         ))}
       </div>
       
       {/* Pagination */}
       <div className="flex justify-center mt-8">
-        <Pagination>
-          <PaginationContent>
-            {/* Previous Button */}
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  goToPage(page - 1)
-                }}
-                disabled={page <= 1}
-              />
-            </PaginationItem>
-
-            {/* Pages */}
-            {pagesToShow.map((pg, index) => {
-              if (pg === -1) {
-                return (
-                  <PaginationItem key={`ellipsis-${index}`}>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )
-              }
-              return (
-                <PaginationItem key={pg}>
-                  <PaginationLink
-                    href="#"
-                    isActive={pg === page}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      goToPage(pg)
-                    }}
-                  >
-                    {pg}
-                  </PaginationLink>
-                </PaginationItem>
-              )
-            })}
-
-            {/* Next Button */}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  goToPage(page + 1)
-                }}
-                disabled={page >= totalPages}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <PaginationWrapper
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+        />
       </div>
     </div>
   );

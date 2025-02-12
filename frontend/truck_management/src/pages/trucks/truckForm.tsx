@@ -1,12 +1,15 @@
 "use client"
-import { toast } from "sonner"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useNavigate } from "react-router-dom"
-import * as z from "zod"
-import api from "../../services/api" 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
+import { toast } from "sonner";
+
+// Componentes do shadcn
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -15,16 +18,16 @@ import {
   FormLabel,
   FormMessage,
   FormDescription,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from "@/components/ui/select"
+  SelectValue,
+} from "@/components/ui/select";
 
-// form scheema definition
+// Schema de validação para trucks
 const formSchema = z.object({
   plate: z.string().min(1, "Truck plate is required"),
   minimum_license_required: z
@@ -34,81 +37,113 @@ const formSchema = z.object({
       (val) => ["A", "B", "C", "D", "E"].includes(val),
       { message: "Select a valid licence type!" }
     ),
-})
+});
 
-export default function TruckForm() {
-  const navigate = useNavigate()
-  // react-hook-form config
-  const form = useForm<z.infer<typeof formSchema>>({
+export type TruckFormValues = z.infer<typeof formSchema>;
+
+interface TruckFormProps {
+  initialData?: TruckFormValues & { id?: number };
+  mode?: "create" | "update";
+}
+
+export default function TruckForm({ initialData, mode = "create" }: TruckFormProps) {
+  const navigate = useNavigate();
+
+  // Configuração do formulário com react-hook-form
+  const form = useForm<TruckFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       plate: "",
       minimum_license_required: "",
     },
-  })
+  });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  // Atualiza os valores do formulário caso os dados iniciais mudem (para edição)
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form.reset]);
+
+  async function onSubmit(values: TruckFormValues) {
     try {
-      // send POST to "trucks/"
-      await api.post("trucks/", values)
-      toast.success("Truck created!")
-      form.reset()
-      navigate("/trucks")
-    } catch {
-      toast.error("Truck creation failed... Try again.")
+      if (mode === "create") {
+        // Criação: envia um POST e redireciona para a lista de trucks
+        await api.post("trucks/", values);
+        toast.success("Truck created!");
+        form.reset();
+        navigate("/trucks");
+      } else {
+        // Atualização: envia um PUT para o truck existente e redireciona para a view do truck
+        await api.put(`trucks/${initialData?.id}/`, values);
+        toast.success("Truck updated!");
+        form.reset();
+        navigate(`/trucks/${initialData?.id}`);
+      }
+    } catch (error) {
+      console.error("Error submitting truck form:", error);
+      toast.error("Truck creation/update failed... Try again.");
     }
   }
 
   return (
+    // Passa o objeto completo "form" para o componente Form
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
         
-        {/* Plate field */}
+        {/* Campo para a placa */}
         <FormField
           control={form.control}
           name="plate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Truck plate</FormLabel>
+              <FormLabel>Truck Plate</FormLabel>
               <FormControl>
-                <Input placeholder="Type the truck plate" {...field} />
+                <Input placeholder="Enter truck plate" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        
-        {/* Minimum license type field */}
+
+        {/* Campo para o tipo mínimo de licença */}
         <FormField
           control={form.control}
           name="minimum_license_required"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>License type</FormLabel>
-              <FormDescription>This is the minimum license required to drive the truck.</FormDescription>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
-                <FormControl>
+              <FormLabel>Minimum License Required</FormLabel>
+              <FormDescription>
+                This is the minimum license required to operate this truck.
+              </FormDescription>
+              <FormControl>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select license type" />
                   </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="A">A</SelectItem>
-                  <SelectItem value="B">B</SelectItem>
-                  <SelectItem value="C">C</SelectItem>
-                  <SelectItem value="D">D</SelectItem>
-                  <SelectItem value="E">E</SelectItem>
-                </SelectContent>
-              </Select>
+                  <SelectContent>
+                    <SelectItem value="A">A</SelectItem>
+                    <SelectItem value="B">B</SelectItem>
+                    <SelectItem value="C">C</SelectItem>
+                    <SelectItem value="D">D</SelectItem>
+                    <SelectItem value="E">E</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Create Truck!</Button>
+
+        <div className="flex justify-end gap-4">
+          <Button variant="outline" type="button" onClick={() => navigate("/trucks")}>
+            Back
+          </Button>
+          <Button type="submit" disabled={!form.formState.isDirty}>
+            {mode === "create" ? "Create Truck" : "Update Truck"}
+          </Button>
+        </div>
       </form>
     </Form>
-  )
+  );
 }

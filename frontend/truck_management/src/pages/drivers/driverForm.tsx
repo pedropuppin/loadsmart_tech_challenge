@@ -1,12 +1,15 @@
 "use client"
-import { toast } from "sonner"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useNavigate } from "react-router-dom"
-import * as z from "zod"
-import api from "../../services/api" 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
+import { toast } from "sonner";
+
+// Componentes do shadcn
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -14,16 +17,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from "@/components/ui/select"
+  SelectValue,
+} from "@/components/ui/select";
 
-// form scheema definition
+// Schema de validação
 const formSchema = z.object({
   name: z.string().min(1, "Driver name is required"),
   license_type: z
@@ -33,80 +36,101 @@ const formSchema = z.object({
       (val) => ["A", "B", "C", "D", "E"].includes(val),
       { message: "Select a valid licence type!" }
     ),
-})
+});
 
-export default function DriverForm() {
-  const navigate = useNavigate()
-  // react-hook-form config
-  const form = useForm<z.infer<typeof formSchema>>({
+export type DriverFormValues = z.infer<typeof formSchema>;
+
+interface DriverFormProps {
+  initialData?: DriverFormValues & { id?: number };
+  mode?: "create" | "update";
+}
+
+export default function DriverForm({ initialData, mode = "create" }: DriverFormProps) {
+  const navigate = useNavigate();
+  
+  const form = useForm<DriverFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       name: "",
       license_type: "",
     },
-  })
+  });
+  
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form.reset]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: DriverFormValues) {
     try {
-      // send POST to "drivers/"
-      await api.post("drivers/", values)
-      toast.success("Driver created!")
-      form.reset()
-      navigate("/drivers")
-    } catch {
-      toast.error("Driver creation failed... Try again.")
+      if (mode === "create") {
+        await api.post("drivers/", values);
+        toast.success("Driver created!");
+        form.reset();
+        navigate("/drivers");
+      } else {
+        await api.put(`drivers/${initialData?.id}/`, values);
+        toast.success("Driver updated!");
+        form.reset();
+        navigate(`/drivers/${initialData?.id}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Driver creation/update failed... Try again.");
     }
   }
 
   return (
+    // Aqui passamos o objeto completo `form` para o componente Form
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
-        
-        {/* Name field */}
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Drive name</FormLabel>
+              <FormLabel>Driver Name</FormLabel>
               <FormControl>
-                <Input placeholder="Type the driver name" {...field} />
+                <Input placeholder="Enter driver name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        
-        {/* License type field */}
         <FormField
           control={form.control}
           name="license_type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>License type</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
-                <FormControl>
+              <FormLabel>License Type</FormLabel>
+              <FormControl>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select license type" />
                   </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="A">A</SelectItem>
-                  <SelectItem value="B">B</SelectItem>
-                  <SelectItem value="C">C</SelectItem>
-                  <SelectItem value="D">D</SelectItem>
-                  <SelectItem value="E">E</SelectItem>
-                </SelectContent>
-              </Select>
+                  <SelectContent>
+                    <SelectItem value="A">A</SelectItem>
+                    <SelectItem value="B">B</SelectItem>
+                    <SelectItem value="C">C</SelectItem>
+                    <SelectItem value="D">D</SelectItem>
+                    <SelectItem value="E">E</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Create Driver!</Button>
+        <div className="flex justify-end gap-4">
+          <Button variant="outline" type="button" onClick={() => navigate("/drivers")}>
+            Back
+          </Button>
+          <Button type="submit" disabled={!form.formState.isDirty}>
+            {mode === "create" ? "Create Driver" : "Update Driver"}
+          </Button>
+        </div>
       </form>
     </Form>
-  )
+  );
 }
