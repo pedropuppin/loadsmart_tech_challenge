@@ -19,12 +19,14 @@ export interface Driver {
   id: number;
   name: string;
   license_type: string;
+  assignments_count: number;
 }
 
 export interface TruckType {
   id: number;
   plate: string;
   minimum_license_required: string;
+  assignments_count: number;
 }
 
 export interface PaginatedResponse<T> {

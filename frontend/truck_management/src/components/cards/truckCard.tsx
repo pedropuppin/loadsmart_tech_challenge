@@ -34,7 +34,10 @@ const TruckCard: React.FC<TruckCardProps> = ({ truck }) => {
           </Badge>
         </p>
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-between">
+        <span className="text-sm text-muted-foreground">
+            Assignments: <strong>{truck.assignments_count || 0}</strong>
+        </span>
         <Link to={`/trucks/${truck.id}`}>
           <Button variant="outline">
             Details

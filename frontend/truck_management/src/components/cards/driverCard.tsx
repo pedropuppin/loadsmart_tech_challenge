@@ -32,7 +32,10 @@ const DriverCard: React.FC<DriverCardProps> = ({ driver }) => {
           License: <Badge variant="secondary">{driver.license_type}</Badge>
         </p>
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-between">
+        <span className="text-sm text-muted-foreground">
+          Assignments: <strong>{driver.assignments_count || 0}</strong>
+        </span>
         <Link to={`/drivers/${driver.id}`}>
           <Button variant="outline">
             Details
