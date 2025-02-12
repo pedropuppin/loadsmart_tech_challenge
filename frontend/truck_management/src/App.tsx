@@ -6,10 +6,10 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 
 // Import pages
-//import Dashboard from './pages/dashboard'
 import DriverList from './pages/drivers/driverList';
 import TruckList from './pages/trucks/truckList';
 import AssignmentList from './pages/assignments/assignmentList';
+import Dashboard from './pages/dashboard/dashboard';
 //import DriverForm from './pages/drivers/driverForm';
 //import TruckForm from './pages/Trucks/TruckForm';
 //import AssignmentForm from './pages/assignments/AssignmentForm';
@@ -20,6 +20,7 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Dashboard />} />
             <Route path="drivers" element={<DriverList />} />
             <Route path="trucks" element={<TruckList />} />
             <Route path="assignments" element={<AssignmentList />} />

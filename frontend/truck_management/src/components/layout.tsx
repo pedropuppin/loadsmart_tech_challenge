@@ -1,24 +1,46 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import {
   Menubar,
   MenubarMenu,
   MenubarTrigger,
-  MenubarContent,
-  MenubarCheckboxItem,
 } from "@/components/ui/menubar"
 import { useTheme } from "@/components/theme-provider";
+import { LoadsmartLogo } from "@/components/svg/LoadsmartLogo"
+import { Moon, Sun } from "lucide-react"
 
 
 const Layout: React.FC = () => {
   const { theme, setTheme } = useTheme();
+  
+  const effectiveTheme = useMemo(() => {
+    if (theme === "system") {
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches
+      return systemPrefersDark ? "dark" : "light"
+    }
+    return theme
+  }, [theme])
+  
+  const isDark = effectiveTheme === "dark"
+
+  const handleClick = () => {
+    setTheme(isDark ? "light" : "dark")
+  }
+  
+  const icon = isDark
+  ? <Moon className="w-4 h-4" />
+  : <Sun className="w-4 h-4" />
   
   return (
     <div className="min-h-screen flex flex-col">
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger asChild>
-              <Link to="/">Dashboard</Link>
+              <Link to="/" className="flex items-center">
+                <LoadsmartLogo/>
+              </Link>
             </MenubarTrigger>
           </MenubarMenu>
           
@@ -39,33 +61,26 @@ const Layout: React.FC = () => {
               <Link to="/assignments">Assignments</Link>
             </MenubarTrigger>
           </MenubarMenu>
-          
+                    
+          {/* Theme toggle */}
           <MenubarMenu>
-            <MenubarTrigger>Theme</MenubarTrigger>
-            <MenubarContent>
-              <MenubarCheckboxItem
-                checked={theme === "light"}
-                onClick={() => setTheme("light")}
-              >
-                Light
-              </MenubarCheckboxItem>
-            
-              <MenubarCheckboxItem
-                checked={theme === "dark"}
-                onClick={() => setTheme("dark")}
-              >
-                Dark
-              </MenubarCheckboxItem>
-              
-              <MenubarCheckboxItem
-                checked={theme === "system"}
-                onClick={() => setTheme("system")}
-              >
-                System
-              </MenubarCheckboxItem>
-            </MenubarContent>
+            <MenubarTrigger
+              onClick={handleClick}
+              className="
+                px-2 py-1 
+                flex items-center 
+                gap-2 
+                text-sm font-medium
+                hover:bg-secondary/20
+                rounded
+                transition-colors
+              "
+            >
+              {icon}
+            </MenubarTrigger>
           </MenubarMenu>
         </Menubar>
+        
       <main className="flex-1 p-4">
         <Outlet /> {/* Renders the matched child route */}
       </main>
