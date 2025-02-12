@@ -7,6 +7,11 @@ class SmallPageNumberPagination(PageNumberPagination):
     page_size = 15
     
 class DriverViewSet(viewsets.ModelViewSet):
-    queryset = Driver.objects.all()
+    queryset = Driver.objects.all().order_by('-id')
     serializer_class = DriverSerializer
     pagination_class = SmallPageNumberPagination
+    
+    def list(self, request, *args, **kwargs):
+        if request.query_params.get('all') == 'true':
+            self.pagination_class = None
+        return super().list(request, *args, **kwargs)

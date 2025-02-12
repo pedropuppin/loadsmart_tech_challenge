@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../services/api'; 
+import api from '../../services/api';
+import { Driver, PaginatedResponse } from "@/types"
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
 import {
@@ -20,20 +21,6 @@ import {
 } from "@/components/ui/pagination"
 import { User } from "lucide-react"
 import { getPagesToShow } from "@/utils/pagination"
-
-
-interface Driver {
-  id: number;
-  name: string;
-  license_type: string;
-}
-
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
 
 const PAGE_SIZE = 15
 

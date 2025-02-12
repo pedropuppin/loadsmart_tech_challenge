@@ -1,5 +1,9 @@
 from rest_framework import serializers
-from ..models import Assignment
+from django.db import IntegrityError, transaction
+
+from ..models import Assignment, Driver, Truck
+from .driver_serializer import DriverSerializer
+from .truck_serializer import TruckSerializer
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -11,10 +15,15 @@ class AssignmentSerializer(serializers.ModelSerializer):
       - The driver's license type is sufficient for the truck's required minimum license.
       - The same driver or truck is not assigned more than once on the same date.
     """
+    driver_detail = DriverSerializer(source='driver', read_only=True)
+    truck_detail = TruckSerializer(source='truck', read_only=True)
+    
+    driver = serializers.PrimaryKeyRelatedField(queryset=Driver.objects.all())
+    truck = serializers.PrimaryKeyRelatedField(queryset=Truck.objects.all())
+    
     class Meta:
         model = Assignment
-        fields = '__all__'
-        depth = 1
+        fields = ('id', 'driver', 'truck', 'driver_detail', 'truck_detail', 'date')
 
     def validate(self, data):
         """

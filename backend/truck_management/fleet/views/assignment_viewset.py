@@ -8,6 +8,6 @@ class SmallPageNumberPagination(PageNumberPagination):
     page_size = 15
 
 class AssignmentViewSet(viewsets.ModelViewSet):
-    queryset = Assignment.objects.all()
+    queryset = Assignment.objects.all().order_by('-id')
     serializer_class = AssignmentSerializer
     pagination_class = SmallPageNumberPagination

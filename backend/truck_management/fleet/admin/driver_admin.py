@@ -5,6 +5,7 @@ from ..models import Driver
 @admin.register(Driver)
 class DriverAdmin(admin.ModelAdmin):
     list_display = [
+        'id',
 		'name',
 		'license_type',
 	]

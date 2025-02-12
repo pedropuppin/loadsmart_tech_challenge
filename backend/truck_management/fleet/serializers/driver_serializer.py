@@ -5,4 +5,4 @@ from ..models import Driver
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Driver
-        fields = '__all__'
+        fields = ('id', 'name', 'license_type')

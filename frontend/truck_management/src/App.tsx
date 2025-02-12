@@ -10,7 +10,7 @@ import AssignmentList from './pages/assignments/assignmentList';
 import Dashboard from './pages/dashboard/dashboard';
 import DriverForm from './pages/drivers/driverForm';
 import TruckForm from './pages/trucks/truckForm';
-//import AssignmentForm from './pages/assignments/AssignmentForm';
+import AssignmentForm from './pages/assignments/assignmentForm';
 
 const App: React.FC = () => {
   return (
@@ -19,11 +19,12 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Dashboard />} />
-            <Route path="drivers" element={<DriverList />} />
-            <Route path="/drivers/new" element={<DriverForm />} />
-            <Route path="trucks" element={<TruckList />} />
-            <Route path="/trucks/new" element={<TruckForm />} />
             <Route path="assignments" element={<AssignmentList />} />
+            <Route path="drivers" element={<DriverList />} />
+            <Route path="trucks" element={<TruckList />} />
+            <Route path="/assignments/new" element={<AssignmentForm />} />
+            <Route path="/drivers/new" element={<DriverForm />} />
+            <Route path="/trucks/new" element={<TruckForm />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../services/api'; 
+import api from '../../services/api';
+import { TruckType, PaginatedResponse } from "@/types"
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
 import {
@@ -22,23 +23,10 @@ import {
 import { Truck } from "lucide-react"
 import { getPagesToShow } from "@/utils/pagination"
 
-interface Truck {
-  id: number;
-  plate: string;
-  minimum_license_required: string;
-}
-
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
-
 const PAGE_SIZE = 15
 
 const TruckList: React.FC = () => {
-  const [trucks, setTrucks] = useState<Truck[]>([])
+  const [trucks, setTrucks] = useState<TruckType[]>([])
   const [totalCount, setTotalCount] = useState<number>(0)
   const [page, setPage] = useState<number>(1) // current page number
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
@@ -47,7 +35,7 @@ const TruckList: React.FC = () => {
   useEffect(() => {
     const url = `trucks/?page=${page}`
     api
-      .get<PaginatedResponse<Truck>>(url)
+      .get<PaginatedResponse<TruckType>>(url)
       .then((response) => {
         setTrucks(response.data.results)
         setTotalCount(response.data.count)

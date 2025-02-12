@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../services/api'; 
+import api from '../../services/api';
+import { Assignment, PaginatedResponse } from "@/types"
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
 import {
@@ -21,29 +22,6 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Truck, User, Calendar } from "lucide-react"
 import { getPagesToShow } from "@/utils/pagination"
-
-
-interface Assignment {
-  id: number;
-  driver: {
-    id: number;
-    name: string;
-    license_type: string;
-  };
-  truck: {
-    id: number;
-    plate: string;
-    minimum_license_required: string;
-  };
-  date: string;
-}
-
-interface PaginatedResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
 
 const PAGE_SIZE = 15
 
@@ -99,14 +77,14 @@ const AssignmentList: React.FC = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="w-4 h-4 text-muted-foreground" />
-                <span className="font-semibold">{assignment.driver.name}</span>
+                <span className="font-semibold">{assignment.driver_detail.name}</span>
                 <Badge variant="secondary">
-                  {assignment.driver.license_type}
+                  {assignment.driver_detail.license_type}
                 </Badge>
               </CardTitle>
               <CardDescription className="flex items-center gap-2 mt-2">
                 <Truck className="w-4 h-4 text-muted-foreground" />
-                <span>{assignment.truck.plate}</span>
+                <span>{assignment.truck_detail.plate}</span>
               </CardDescription>
             </CardHeader>
             <CardContent className="flex items-center gap-2">

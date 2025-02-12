@@ -5,4 +5,4 @@ from ..models import Truck
 class TruckSerializer(serializers.ModelSerializer):
     class Meta:
         model = Truck
-        fields = '__all__'
+        fields = ('id', 'plate', 'minimum_license_required')
