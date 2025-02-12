@@ -123,7 +123,7 @@ export default function DriverForm({ initialData, mode = "create" }: DriverFormP
           )}
         />
         <div className="flex justify-end gap-4">
-          <Button variant="outline" type="button" onClick={() => navigate(`/drivers/${initialData?.id}`)}>
+          <Button variant="outline" type="button" onClick={() => navigate(-1)}>
             Back
           </Button>
           <Button type="submit" disabled={!form.formState.isDirty}>

@@ -216,7 +216,13 @@ export default function AssignmentForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Create assignment!</Button>
+        
+        <div className="flex justify-end gap-4">
+          <Button variant="outline" type="button" onClick={() => navigate(-1)}>
+            Back
+          </Button>
+          <Button type="submit">Create assignment!</Button>
+        </div>
       </form>
     </Form>
   )

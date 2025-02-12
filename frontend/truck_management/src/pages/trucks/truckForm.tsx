@@ -136,7 +136,7 @@ export default function TruckForm({ initialData, mode = "create" }: TruckFormPro
         />
 
         <div className="flex justify-end gap-4">
-          <Button variant="outline" type="button" onClick={() => navigate("/trucks")}>
+          <Button variant="outline" type="button" onClick={() => navigate(-1)}>
             Back
           </Button>
           <Button type="submit" disabled={!form.formState.isDirty}>
