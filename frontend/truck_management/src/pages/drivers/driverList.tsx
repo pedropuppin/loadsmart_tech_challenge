@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { toast } from "sonner"
 import {
   Pagination,
   PaginationContent,
@@ -19,7 +20,18 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination"
-import { User } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { User, Trash } from "lucide-react"
 import { getPagesToShow } from "@/utils/pagination"
 
 const PAGE_SIZE = 15
@@ -28,7 +40,6 @@ const DriverList: React.FC = () => {
   // Data and pagination state
   const [drivers, setDrivers] = useState<Driver[]>([])
   const [totalCount, setTotalCount] = useState(0)
-
   const [page, setPage] = useState(1) // current page number
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
 
@@ -50,6 +61,18 @@ const DriverList: React.FC = () => {
   }
 
   const pagesToShow = getPagesToShow(page, totalPages)
+  
+  const handleDelete = async (driverId: number) => {
+    try {
+      await api.delete(`drivers/${driverId}/`);
+      toast.success("Driver deleted successfully!");
+      setDrivers(drivers.filter((driver) => driver.id !== driverId));
+      setTotalCount(totalCount - 1);
+    } catch (error) {
+      console.error("Error deleting driver:", error);
+      toast.error("Failed to delete driver. Try again.");
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -73,11 +96,36 @@ const DriverList: React.FC = () => {
             key={driver.id}
             className="shadow-sm transition-all hover:shadow-md hover:bg-secondary/10"
           >
-            <CardHeader>
+            <CardHeader className="flex justify-between flex-row space-y-0 items-center">
               <CardTitle className="flex items-center gap-2">
                 <User className="w-4 h-4 text-muted-foreground" />
                 {driver.name}
               </CardTitle>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="ghost" className="text-red-500 p-2">
+                    <Trash className="w-4 h-4" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete this driver ({driver.name}).
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleDelete(driver.id)}
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardHeader>
             <CardContent>
               <p className="flex items-center gap-2 text-sm text-muted-foreground">

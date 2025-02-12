@@ -19,8 +19,20 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
-import { Truck, User, Calendar } from "lucide-react"
+import { Truck, User, Calendar, Trash } from "lucide-react"
 import { getPagesToShow } from "@/utils/pagination"
 
 const PAGE_SIZE = 15
@@ -54,6 +66,18 @@ const AssignmentList: React.FC = () => {
 
   // Compute which pages to display (with ellipses)
   const pagesToShow = getPagesToShow(page, totalPages)
+  
+  const handleDelete = async (assignmentId: number) => {
+    try {
+      await api.delete(`assignments/${assignmentId}/`);
+      toast.success("Assignment deleted successfully!");
+      setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
+      setTotalCount(totalCount - 1);
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
+      toast.error("Failed to delete assignment. Try again.");
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -74,18 +98,46 @@ const AssignmentList: React.FC = () => {
             key={assignment.id}
             className="shadow-sm transition-all hover:shadow-md hover:bg-secondary/10"
           >
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="w-4 h-4 text-muted-foreground" />
-                <span className="font-semibold">{assignment.driver_detail.name}</span>
-                <Badge variant="secondary">
-                  {assignment.driver_detail.license_type}
-                </Badge>
-              </CardTitle>
-              <CardDescription className="flex items-center gap-2 mt-2">
-                <Truck className="w-4 h-4 text-muted-foreground" />
-                <span>{assignment.truck_detail.plate}</span>
-              </CardDescription>
+            <CardHeader className="flex justify-between flex-row space-y-0 items-center">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-muted-foreground" />
+                  <span className="font-semibold">{assignment.driver_detail.name}</span>
+                  <Badge variant="secondary">
+                    {assignment.driver_detail.license_type}
+                  </Badge>
+                </CardTitle>
+                <CardDescription className="flex items-center gap-2 mt-2">
+                  <Truck className="w-4 h-4 text-muted-foreground" />
+                  <span>{assignment.truck_detail.plate}</span>
+                </CardDescription>
+              </div>
+              <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" className="text-red-500 p-2">
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete 
+                        this assignment ({assignment.driver_detail.name} - {assignment.date}).
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => handleDelete(assignment.id)}
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
             </CardHeader>
             <CardContent className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-muted-foreground" />
