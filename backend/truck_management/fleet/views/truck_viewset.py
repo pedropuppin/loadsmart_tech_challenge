@@ -4,7 +4,7 @@ from ..models import Truck
 from ..serializers import TruckSerializer
 
 class SmallPageNumberPagination(PageNumberPagination):
-    page_size = 15
+    page_size = 12
 
 class TruckViewSet(viewsets.ModelViewSet):
     queryset = Truck.objects.all().order_by('-id')

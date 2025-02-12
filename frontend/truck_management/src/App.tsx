@@ -13,6 +13,8 @@ import TruckForm from '@/pages/trucks/truckForm';
 import AssignmentForm from '@/pages/assignments/assignmentForm';
 import DriverFormWrapper from '@/pages/drivers/driverFormWrapper'
 import TruckFormWrapper from '@/pages/trucks/truckFormWrapper'
+import DriverDetail from '@/pages/drivers/driverDetail';
+import TruckDetail from './pages/trucks/truckDetail';
 
 const App: React.FC = () => {
   return (
@@ -28,7 +30,9 @@ const App: React.FC = () => {
             <Route path="/drivers/new" element={<DriverForm />} />
             <Route path="/trucks/new" element={<TruckForm />} />
             <Route path="/driver/edit/:id" element={<DriverFormWrapper />} />        
-            <Route path="/truck/edit/:id" element={<TruckFormWrapper />} />        
+            <Route path="/truck/edit/:id" element={<TruckFormWrapper />} />
+            <Route path="/drivers/:id" element={<DriverDetail />} />   
+            <Route path="/trucks/:id" element={<TruckDetail />} />   
           </Route>
         </Routes>
       </BrowserRouter>

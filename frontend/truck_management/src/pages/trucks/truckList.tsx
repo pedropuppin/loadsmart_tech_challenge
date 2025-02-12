@@ -2,22 +2,12 @@ import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { TruckType, PaginatedResponse } from "@/types"
 import { Link } from 'react-router-dom';
-import { getPagesToShow } from "@/utils/pagination"
 import TruckCard from '@/components/cards/truckCard';
 import PaginationWrapper from "@/components/paginationWrapper";
 import { Button } from '../../components/ui/button';
 import { toast } from "sonner"
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationEllipsis,
-} from "@/components/ui/pagination"
 
-const PAGE_SIZE = 15
+const PAGE_SIZE = 12
 
 const TruckList: React.FC = () => {
   const [trucks, setTrucks] = useState<TruckType[]>([])

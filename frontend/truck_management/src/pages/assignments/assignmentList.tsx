@@ -7,7 +7,7 @@ import PaginationWrapper from "@/components/paginationWrapper";
 import { Button } from '../../components/ui/button';
 import { toast } from "sonner"
 
-const PAGE_SIZE = 15
+const PAGE_SIZE = 12
 
 const AssignmentList: React.FC = () => {
   const [assignments, setAssignments] = useState<Assignment[]>([])
