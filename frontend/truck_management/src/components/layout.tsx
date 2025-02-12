@@ -36,6 +36,7 @@ const Layout: React.FC = () => {
   
   return (
     <div className="min-h-screen flex flex-col">
+      <div className="fixed top-0 left-0 w-full z-50">
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger asChild>
@@ -81,7 +82,7 @@ const Layout: React.FC = () => {
             </MenubarTrigger>
           </MenubarMenu>
         </Menubar>
-        
+      </div>
       <main className="flex-1 p-4">
         <Outlet /> {/* Renders the matched child route */}
         <Toaster />
