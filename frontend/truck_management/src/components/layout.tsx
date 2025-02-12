@@ -5,6 +5,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar"
+import { Toaster } from "@/components/ui/sonner"
 import { useTheme } from "@/components/theme-provider";
 import { LoadsmartLogo } from "@/components/svg/LoadsmartLogo"
 import { Moon, Sun } from "lucide-react"
@@ -83,6 +84,7 @@ const Layout: React.FC = () => {
         
       <main className="flex-1 p-4">
         <Outlet /> {/* Renders the matched child route */}
+        <Toaster />
       </main>
     </div>
   );
