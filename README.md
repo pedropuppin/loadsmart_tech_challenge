@@ -54,8 +54,9 @@ and a React-based front end.
   python manage.py migrate
 ```
 
-6. **Create a superuser:**
-```bash 
+6. **Create a superuser (optional):**
+```bash
+  # only if you want to access django admin
   python manage.py createsuperuser
 ```
 
