@@ -80,7 +80,7 @@ and a React-based front end.
 
 2. **Install dependencies:**
 ```bash
-  # assuming you have node,js installed
+  # assuming you have node.js installed
   npm install
 ```
 
