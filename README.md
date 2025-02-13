@@ -67,7 +67,15 @@ and a React-based front end.
   python manage.py seed_db --drivers 20 --trucks 10
 ```
 
-8. **Run the development server:**
+8. **Check if the frontend port is allowed on CORS_ALLOWED_ORIGINS**
+```python
+  # django settings.py file
+  CORS_ALLOWED_ORIGINS = [
+      "http://localhost:<your_port_here>",
+  ]
+```
+
+9. **Run the development server:**
 ```bash 
   python manage.py runserver
 ```
@@ -88,7 +96,7 @@ and a React-based front end.
 3. **Check if you have the correct API URL configured:**
 ```ini
   # .env file
-  VITE_API_URL=http://localhost:8000/api/ # your localhost port here
+  VITE_API_URL=http://localhost:<your_port_here>/api/
 ```
 
 4. **Run the development server:**
