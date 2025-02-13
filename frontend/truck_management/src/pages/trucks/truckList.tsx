@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import TruckCard from '@/components/cards/truckCard';
 import usePaginatedData from '@/hooks/usePaginatedData';
 import PaginationWrapper from "@/components/layout/paginationWrapper";
+import CardGrid from '@/components/layout/cardGrid';
 import { Button } from '../../components/ui/button';
 
 const PAGE_SIZE = 12
@@ -35,23 +36,25 @@ const TruckList: React.FC = () => {
       
       {/* Trucks Grid */}
       {trucks.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
-          {trucks.map(truck => (
-            <TruckCard key={truck.id} truck={truck}/>
-          ))}
-        </div>
+        <>
+          <CardGrid>
+            {trucks.map(truck => (
+              <TruckCard key={truck.id} truck={truck}/>
+            ))}
+          </CardGrid>
+          
+          {/* Pagination */}
+          <div className="flex justify-center mt-8">
+            <PaginationWrapper
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+            />
+          </div>
+        </>
       ) : (
-        <p className="mt-5text-center text-muted-foreground">No trucks found.</p>
+        <p className="mt-5 text-center text-muted-foreground">No trucks found.</p>
       )}
-      
-      {/* Pagination */}
-      <div className="flex justify-center mt-8">
-        <PaginationWrapper
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={goToPage}
-        />
-      </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import AssignmentCard from '@/components/cards/assignmentCard';
 import usePaginatedData from '@/hooks/usePaginatedData';
 import PaginationWrapper from "@/components/layout/paginationWrapper";
+import CardGrid from '@/components/layout/cardGrid';
 import { Button } from '../../components/ui/button';
 import { toast } from "sonner"
 
@@ -40,7 +41,7 @@ const AssignmentList: React.FC = () => {
       {/* Title and total count */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">
-        Assignments{" "}
+          Assignments{" "}
           <span className="text-base text-muted-foreground">({totalCount})</span>
         </h2>
         <Link to="/assignments/new">
@@ -49,23 +50,25 @@ const AssignmentList: React.FC = () => {
       </div>
       
       {assignments.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
-          {assignments.map((assignment) => (
-            <AssignmentCard key={assignment.id} assignment={assignment} onDelete={handleDelete} />
-          ))}
-        </div>
+        <>
+          <CardGrid>
+            {assignments.map((assignment) => (
+              <AssignmentCard key={assignment.id} assignment={assignment} onDelete={handleDelete} />
+            ))}
+          </CardGrid>
+          
+          {/* Pagination */}
+          <div className="flex justify-center mt-8">
+            <PaginationWrapper
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+            />
+          </div>
+        </>
       ) : (
-        <p className="mt-5text-center text-muted-foreground">No assignments found.</p>
+        <p className="mt-5 text-center text-muted-foreground">No assignments found.</p>
       )}
-      
-      {/* Pagination */}
-      <div className="flex justify-center mt-8">
-        <PaginationWrapper
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={goToPage}
-        />
-      </div>      
     </div>
   );
 };

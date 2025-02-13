@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import DriverCard from "@/components/cards/driverCard";
 import usePaginatedData from '@/hooks/usePaginatedData';
 import PaginationWrapper from "@/components/layout/paginationWrapper";
+import CardGrid from '@/components/layout/cardGrid';
 import { Button } from "@/components/ui/button"
 
 const PAGE_SIZE = 12
@@ -37,23 +38,25 @@ const DriverList: React.FC = () => {
       
       {/* Driver Grid */}
       {drivers.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
-          {drivers.map((driver) => (
-            <DriverCard key={driver.id} driver={driver} />
-          ))}
-        </div>
+        <>
+          <CardGrid>
+            {drivers.map((driver) => (
+              <DriverCard key={driver.id} driver={driver} />
+            ))}
+          </CardGrid>
+          
+          {/* Pagination */}
+          <div className="flex justify-center mt-8">
+            <PaginationWrapper
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+            />
+          </div>
+        </>
       ) : (
-        <p className="mt-5text-center text-muted-foreground">No drivers found.</p>
+        <p className="mt-5 text-center text-muted-foreground">No drivers found.</p>
       )}
-
-      {/* Pagination */}
-      <div className="flex justify-center mt-8">
-        <PaginationWrapper
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={goToPage}
-        />
-      </div>
     </div>
   );
 };
