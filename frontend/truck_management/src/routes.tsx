@@ -8,8 +8,8 @@ import TruckList from '@/pages/trucks/truckList';
 import AssignmentForm from '@/pages/assignments/assignmentForm';
 import DriverForm from '@/pages/drivers/driverForm';
 import TruckForm from '@/pages/trucks/truckForm';
-import DriverFormWrapper from '@/pages/drivers/driverFormWrapper';
-import TruckFormWrapper from '@/pages/trucks/truckFormWrapper';
+import DriverUpdateFormWrapper from '@/pages/drivers/driverUpdateFormWrapper';
+import TruckUpdateFormWrapper from '@/pages/trucks/truckUpdateFormWrapper';
 import DriverDetail from './pages/drivers/driverDetail';
 import TruckDetail from './pages/trucks/truckDetail';
 
@@ -24,8 +24,8 @@ const AppRoutes: React.FC = () => {
         <Route path="assignments/new" element={<AssignmentForm />} />
         <Route path="drivers/new" element={<DriverForm />} />
         <Route path="trucks/new" element={<TruckForm />} />
-        <Route path="driver/edit/:id" element={<DriverFormWrapper />} />
-        <Route path="truck/edit/:id" element={<TruckFormWrapper />} />
+        <Route path="driver/edit/:id" element={<DriverUpdateFormWrapper />} />
+        <Route path="truck/edit/:id" element={<TruckUpdateFormWrapper />} />
         <Route path="drivers/:id" element={<DriverDetail />} />
         <Route path="trucks/:id" element={<TruckDetail />} />
       </Route>

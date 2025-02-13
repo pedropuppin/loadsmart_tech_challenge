@@ -6,7 +6,7 @@ import { DriverFormValues } from "./driverForm";
 import DriverForm from "./driverForm";
 import { toast } from "sonner";
 
-export default function DriverFormWrapper() {
+export default function DriverUpdateFormWrapper() {
   const { id } = useParams();
   const [initialData, setInitialData] = useState<DriverFormValues & { id: number } | null>(null);
 

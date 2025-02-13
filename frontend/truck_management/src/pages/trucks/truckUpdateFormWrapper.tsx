@@ -6,7 +6,7 @@ import { TruckFormValues } from "./truckForm";
 import TruckForm from "./truckForm";
 import { toast } from "sonner";
 
-export default function TruckFormWrapper() {
+export default function TruckUpdateFormWrapper() {
   const { id } = useParams();
   const [initialData, setInitialData] = useState<TruckFormValues & { id: number } | null>(null);
 
