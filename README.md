@@ -80,14 +80,14 @@ and a React-based front end.
 
 2. **Install dependencies:**
 ```bash
-  # assuming you have node,js installed
+  # assuming you have node.js installed
   npm install
 ```
 
 3. **Check if you have the correct API URL configured:**
 ```ini
   # .env file
-  VITE_API_URL=http://localhost:8000/api/
+  VITE_API_URL=http://localhost:8000/api/ # your localhost port here
 ```
 
 4. **Run the development server:**
