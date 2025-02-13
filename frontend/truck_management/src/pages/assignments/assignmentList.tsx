@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import api from '../../services/api';
-import { Assignment, PaginatedResponse } from "@/types"
+import { Assignment } from "@/types"
 import { Link } from 'react-router-dom';
 import AssignmentCard from '@/components/cards/assignmentCard';
+import usePaginatedData from '@/hooks/usePaginatedData';
 import PaginationWrapper from "@/components/layout/paginationWrapper";
 import { Button } from '../../components/ui/button';
 import { toast } from "sonner"
@@ -10,24 +11,11 @@ import { toast } from "sonner"
 const PAGE_SIZE = 12
 
 const AssignmentList: React.FC = () => {
-  const [assignments, setAssignments] = useState<Assignment[]>([])
-  const [totalCount, setTotalCount] = useState(0)
   const [page, setPage] = useState(1)
+  const { data: assignments, totalCount, refetch } = usePaginatedData<Assignment>("assignments/", page);
 
   // Calculate total number of pages
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
-
-  useEffect(() => {
-    // Build the URL with the current page
-    const url = `assignments/?page=${page}`
-    api
-      .get<PaginatedResponse<Assignment>>(url)
-      .then((response) => {
-        setAssignments(response.data.results)
-        setTotalCount(response.data.count)
-      })
-      .catch((error) => console.error("Error fetching assignments:", error))
-  }, [page])
 
   // Helper to set the page, ensuring it's within valid bounds
   const goToPage = (targetPage: number) => {
@@ -40,8 +28,7 @@ const AssignmentList: React.FC = () => {
     try {
       await api.delete(`assignments/${assignmentId}/`);
       toast.success("Assignment deleted successfully!");
-      setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
-      setTotalCount(totalCount - 1);
+      refetch();
     } catch (error) {
       console.error("Error deleting assignment:", error);
       toast.error("Failed to delete assignment. Try again.");
@@ -61,11 +48,15 @@ const AssignmentList: React.FC = () => {
         </Link>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
-        {assignments.map((assignment) => (
-          <AssignmentCard key={assignment.id} assignment={assignment} onDelete={handleDelete} />
-        ))}
-      </div>
+      {assignments.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
+          {assignments.map((assignment) => (
+            <AssignmentCard key={assignment.id} assignment={assignment} onDelete={handleDelete} />
+          ))}
+        </div>
+      ) : (
+        <p className="mt-5text-center text-muted-foreground">No assignments found.</p>
+      )}
       
       {/* Pagination */}
       <div className="flex justify-center mt-8">
