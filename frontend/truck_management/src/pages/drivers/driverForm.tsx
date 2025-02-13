@@ -75,9 +75,25 @@ export default function DriverForm({ initialData, mode = "create" }: DriverFormP
         form.reset();
         navigate(`/drivers/${initialData?.id}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting form:", error);
-      toast.error("Driver creation/update failed... Try again.");
+      
+      if (error.response && error.response.data) {
+        const errors = error.response.data;
+        let errorMessage = "";
+  
+        if (errors.non_field_errors) {
+          errorMessage = errors.non_field_errors.join(" ");
+        } else {
+          errorMessage = Object.values(errors)
+            .flat()
+            .join(" ");
+        }
+        
+        toast.error(`Driver creation failed: ${errorMessage}`);
+      } else {
+        toast.error("Driver creation failed. Try again.");
+      }
     }
   }
 

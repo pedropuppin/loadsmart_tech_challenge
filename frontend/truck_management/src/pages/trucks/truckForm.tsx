@@ -80,9 +80,25 @@ export default function TruckForm({ initialData, mode = "create" }: TruckFormPro
         form.reset();
         navigate(`/trucks/${initialData?.id}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting truck form:", error);
-      toast.error("Truck creation/update failed... Try again.");
+      
+      if (error.response && error.response.data) {
+        const errors = error.response.data;
+        let errorMessage = "";
+  
+        if (errors.non_field_errors) {
+          errorMessage = errors.non_field_errors.join(" ");
+        } else {
+          errorMessage = Object.values(errors)
+            .flat()
+            .join(" ");
+        }
+        
+        toast.error(`Truck creation failed: ${errorMessage}`);
+      } else {
+        toast.error("Truck creation failed. Try again.");
+      }
     }
   }
 
