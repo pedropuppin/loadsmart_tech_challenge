@@ -5,9 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
+import axios from "axios";
 import { toast } from "sonner";
 
-// Componentes do shadcn
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Schema de validação
+// validation scheema
 const formSchema = z.object({
   name: z.string().min(1, "Driver name is required"),
   license_type: z
@@ -60,7 +60,7 @@ export default function DriverForm({ initialData, mode = "create" }: DriverFormP
     if (initialData) {
       form.reset(initialData);
     }
-  }, [initialData, form.reset]);
+  }, [initialData, form]);
 
   async function onSubmit(values: DriverFormValues) {
     try {
@@ -75,10 +75,10 @@ export default function DriverForm({ initialData, mode = "create" }: DriverFormP
         form.reset();
         navigate(`/drivers/${initialData?.id}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error submitting form:", error);
       
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         const errors = error.response.data;
         let errorMessage = "";
   
@@ -98,9 +98,9 @@ export default function DriverForm({ initialData, mode = "create" }: DriverFormP
   }
 
   return (
-    // Aqui passamos o objeto completo `form` para o componente Form
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+        {/* Name field */}
         <FormField
           control={form.control}
           name="name"
@@ -114,6 +114,8 @@ export default function DriverForm({ initialData, mode = "create" }: DriverFormP
             </FormItem>
           )}
         />
+        
+        {/* License field */}
         <FormField
           control={form.control}
           name="license_type"
@@ -138,6 +140,8 @@ export default function DriverForm({ initialData, mode = "create" }: DriverFormP
             </FormItem>
           )}
         />
+        
+        {/* Navigation Buttons */}
         <div className="flex justify-end gap-4">
           <Button variant="outline" type="button" onClick={() => navigate(-1)}>
             Back

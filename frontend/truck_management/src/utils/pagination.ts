@@ -1,7 +1,3 @@
-/**
- * getPagesToShow returns an array of page numbers (and -1 for ellipses).
- * e.g. [1, -1, 3, 4, 5, -1, 10]
- */
 export function getPagesToShow(currentPage: number, totalPages: number): number[] {
   const pages: number[] = []
   
@@ -13,7 +9,7 @@ export function getPagesToShow(currentPage: number, totalPages: number): number[
     return pages
   }
 
-  // Always show the first page
+  // always show the first page
   pages.push(1)
 
   // If the current page is far from the start, show an ellipsis

@@ -1,5 +1,4 @@
 "use client"
-
 import React from "react";
 import { Linkedin, Github, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,7 @@ const Footer: React.FC = () => {
           href="https://www.linkedin.com/in/pedro-puppin" 
           target="_blank" 
           rel="noopener noreferrer"
+          title="linkedin"
           className="hover:text-blue-600"
         >
           <Linkedin className="w-6 h-6" />
@@ -36,6 +36,7 @@ const Footer: React.FC = () => {
           href="https://github.com/pedropuppin" 
           target="_blank" 
           rel="noopener noreferrer"
+          title="Github"
           className="hover:text-gray-600"
         >
           <Github className="w-6 h-6" />

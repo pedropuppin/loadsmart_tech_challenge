@@ -14,7 +14,6 @@ import {
 
 interface TruckCardProps {
   truck: TruckType;
-  onDelete: (id: number) => void;
 }
 
 const TruckCard: React.FC<TruckCardProps> = ({ truck }) => {

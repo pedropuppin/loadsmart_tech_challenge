@@ -3,9 +3,8 @@ import api from '../../services/api';
 import { Driver, PaginatedResponse } from "@/types"
 import { Link } from 'react-router-dom';
 import DriverCard from "@/components/cards/driverCard";
-import PaginationWrapper from "@/components/paginationWrapper";
+import PaginationWrapper from "@/components/layout/paginationWrapper";
 import { Button } from "@/components/ui/button"
-import { toast } from "sonner"
 
 const PAGE_SIZE = 12
 
@@ -32,18 +31,6 @@ const DriverList: React.FC = () => {
       setPage(targetPage)
     }
   }
-  
-  const handleDelete = async (driverId: number) => {
-    try {
-      await api.delete(`drivers/${driverId}/`);
-      toast.success("Driver deleted successfully!");
-      setDrivers(drivers.filter((driver) => driver.id !== driverId));
-      setTotalCount(totalCount - 1);
-    } catch (error) {
-      console.error("Error deleting driver:", error);
-      toast.error("Failed to delete driver. Try again.");
-    }
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -55,15 +42,15 @@ const DriverList: React.FC = () => {
             ({totalCount})
           </span>
         </h2>
-        <Button variant="outline">
-          <Link to="/drivers/new">Add Driver</Link>
-        </Button>
+          <Link to="/drivers/new">
+            <Button variant="outline">Add Driver</Button>
+          </Link>
       </div>
 
       {/* Driver Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {drivers.map((driver) => (
-          <DriverCard key={driver.id} driver={driver} onDelete={handleDelete} />
+          <DriverCard key={driver.id} driver={driver} />
         ))}
       </div>
 

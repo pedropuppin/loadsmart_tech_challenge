@@ -95,7 +95,7 @@ const TruckDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Exibe os detalhes do truck */}
+      {/* Truck license*/}
       <div className="mb-8">
         <p className="flex items-center gap-2">
           <strong className="text-muted-foreground">Minimum License Required:</strong>
@@ -103,7 +103,7 @@ const TruckDetail: React.FC = () => {
         </p>
       </div>
 
-      {/* Exibe os assignments relacionados, se houver */}
+      {/* Truck related assignments */}
       {assignments.length > 0 ? (
         <div>
           <h3 className="text-xl font-bold mb-6 text-center">Assignments</h3>
@@ -117,7 +117,7 @@ const TruckDetail: React.FC = () => {
         <p className="text-muted-foreground">No assignments found for this truck.</p>
       )}
 
-      {/* Botão de voltar */}
+      {/* Navigation */}
       <div className="mt-8 flex justify-center">
         <Link to="/trucks">
           <Button variant="outline">Back</Button>

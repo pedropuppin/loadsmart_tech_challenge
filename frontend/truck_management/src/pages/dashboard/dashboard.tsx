@@ -9,7 +9,7 @@ const Dashboard: React.FC = () => {
       {/* Project Title */}
       <h1 className="text-4xl font-bold mb-4">Welcome to Fleet Management</h1>
       
-      {/* Brief Description */}
+      {/* Description */}
       <p className="text-lg text-muted-foreground mb-6">
         A simple application that lets you manage drivers, trucks, and assignments.
         It provides a REST API built with Django and Django REST Framework, and a 
@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
         you need for your fleet operations.
       </p>
 
-      {/* Quick Actions */}
+      {/* Actions */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
         <Link to="/drivers">
           <Button variant="outline">View Drivers</Button>

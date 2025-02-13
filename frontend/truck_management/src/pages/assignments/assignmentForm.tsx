@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import api from "../../services/api"
+import axios from 'axios';
 import { Driver, TruckType } from '@/types'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -77,7 +78,7 @@ export default function AssignmentForm() {
     defaultValues: {
       driver: "",
       truck: "",
-      date: null,
+      date: undefined,
     },
   })
 
@@ -94,10 +95,10 @@ export default function AssignmentForm() {
       toast.success("Assignment created successfully!")
       form.reset()
       navigate("/assignments")
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Assignment creation error:", error);
       
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         const errors = error.response.data;
         let errorMessage = "";
   
@@ -108,7 +109,7 @@ export default function AssignmentForm() {
             .flat()
             .join(" ");
         }
-        
+  
         toast.error(`Assignment creation failed: ${errorMessage}`);
       } else {
         toast.error("Assignment creation failed. Try again.");

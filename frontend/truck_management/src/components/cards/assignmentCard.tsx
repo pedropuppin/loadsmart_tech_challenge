@@ -1,4 +1,3 @@
-// AssignmentCard.tsx
 "use client"
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -19,7 +18,7 @@ import { User, Truck, Calendar, Trash } from "lucide-react";
 import { Assignment } from "@/types";
 
 interface AssignmentCardProps {
-  assignment: Assignment; // Reutilize o tipo definido em "@/types"
+  assignment: Assignment;
   onDelete: (assignmentId: number) => void;
 }
 

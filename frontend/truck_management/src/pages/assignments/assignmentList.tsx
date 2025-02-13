@@ -3,7 +3,7 @@ import api from '../../services/api';
 import { Assignment, PaginatedResponse } from "@/types"
 import { Link } from 'react-router-dom';
 import AssignmentCard from '@/components/cards/assignmentCard';
-import PaginationWrapper from "@/components/paginationWrapper";
+import PaginationWrapper from "@/components/layout/paginationWrapper";
 import { Button } from '../../components/ui/button';
 import { toast } from "sonner"
 
@@ -56,9 +56,9 @@ const AssignmentList: React.FC = () => {
         Assignments{" "}
           <span className="text-base text-muted-foreground">({totalCount})</span>
         </h2>
-        <Button variant="outline">
-          <Link to="/assignments/new">Add Assignment</Link>
-        </Button>
+        <Link to="/assignments/new">
+          <Button variant="outline">Add Assignment</Button>
+        </Link>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">

@@ -3,9 +3,8 @@ import api from '../../services/api';
 import { TruckType, PaginatedResponse } from "@/types"
 import { Link } from 'react-router-dom';
 import TruckCard from '@/components/cards/truckCard';
-import PaginationWrapper from "@/components/paginationWrapper";
+import PaginationWrapper from "@/components/layout/paginationWrapper";
 import { Button } from '../../components/ui/button';
-import { toast } from "sonner"
 
 const PAGE_SIZE = 12
 
@@ -34,18 +33,6 @@ const TruckList: React.FC = () => {
     }
   }
   
-  const handleDelete = async (truckId: number) => {
-    try {
-      await api.delete(`trucks/${truckId}/`);
-      toast.success("Truck deleted successfully!");
-      setTrucks(trucks.filter((truck) => truck.id !== truckId));
-      setTotalCount(totalCount - 1);
-    } catch (error) {
-      console.error("Error deleting truck:", error);
-      toast.error("Failed to delete truck. Try again.");
-    }
-  };
-  
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Title and total count */}
@@ -54,15 +41,15 @@ const TruckList: React.FC = () => {
           Trucks{" "}
           <span className="text-base text-muted-foreground">({totalCount})</span>
         </h2>
-        <Button variant="outline">
-          <Link to="/trucks/new">Add Truck</Link>
-        </Button>
+          <Link to="/trucks/new">
+            <Button variant="outline">Add Truck</Button>
+          </Link>
       </div>
       
       {/* Trucks Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
         {trucks.map(truck => (
-          <TruckCard key={truck.id} truck={truck} onDelete={handleDelete} />
+          <TruckCard key={truck.id} truck={truck}/>
         ))}
       </div>
       

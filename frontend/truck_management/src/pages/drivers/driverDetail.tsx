@@ -29,7 +29,7 @@ const DriverDetail: React.FC = () => {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   
   useEffect(() => {
-    // Buscando os dados do driver
+    // fetch driver data
     api.get<Driver>(`drivers/${id}/`)
       .then((response) => setDriver(response.data))
       .catch((error) => {
@@ -37,8 +37,7 @@ const DriverDetail: React.FC = () => {
         toast.error("Error fetching driver details.");
       });
     
-    // Buscando os assignments relacionados ao driver.
-    // Se sua API retornar os assignments paginados, verifique se precisa de ajuste (ex: response.data.results).
+    // fetch driver related assignments
     api.get<PaginatedResponse<Assignment>>(`assignments/?driver=${id}`)
       .then((response) => {
         const data = response.data.results ?? response.data;

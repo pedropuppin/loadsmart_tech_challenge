@@ -5,9 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
+import axios from "axios";
 import { toast } from "sonner";
 
-// Componentes do shadcn
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,7 +27,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Schema de validação para trucks
 const formSchema = z.object({
   plate: z.string().min(1, "Truck plate is required"),
   minimum_license_required: z
@@ -49,7 +48,6 @@ interface TruckFormProps {
 export default function TruckForm({ initialData, mode = "create" }: TruckFormProps) {
   const navigate = useNavigate();
 
-  // Configuração do formulário com react-hook-form
   const form = useForm<TruckFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
@@ -58,32 +56,32 @@ export default function TruckForm({ initialData, mode = "create" }: TruckFormPro
     },
   });
 
-  // Atualiza os valores do formulário caso os dados iniciais mudem (para edição)
+  // updates form values
   useEffect(() => {
     if (initialData) {
       form.reset(initialData);
     }
-  }, [initialData, form.reset]);
+  }, [initialData, form]);
 
   async function onSubmit(values: TruckFormValues) {
     try {
       if (mode === "create") {
-        // Criação: envia um POST e redireciona para a lista de trucks
+        // create
         await api.post("trucks/", values);
         toast.success("Truck created!");
         form.reset();
         navigate("/trucks");
       } else {
-        // Atualização: envia um PUT para o truck existente e redireciona para a view do truck
+        // update
         await api.put(`trucks/${initialData?.id}/`, values);
         toast.success("Truck updated!");
         form.reset();
         navigate(`/trucks/${initialData?.id}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error submitting truck form:", error);
       
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         const errors = error.response.data;
         let errorMessage = "";
   
@@ -103,11 +101,9 @@ export default function TruckForm({ initialData, mode = "create" }: TruckFormPro
   }
 
   return (
-    // Passa o objeto completo "form" para o componente Form
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
-        
-        {/* Campo para a placa */}
+        {/* Plate field */}
         <FormField
           control={form.control}
           name="plate"
@@ -122,7 +118,7 @@ export default function TruckForm({ initialData, mode = "create" }: TruckFormPro
           )}
         />
 
-        {/* Campo para o tipo mínimo de licença */}
+        {/* Minimum license field */}
         <FormField
           control={form.control}
           name="minimum_license_required"
@@ -150,7 +146,8 @@ export default function TruckForm({ initialData, mode = "create" }: TruckFormPro
             </FormItem>
           )}
         />
-
+        
+        {/* Navigation buttons */}
         <div className="flex justify-end gap-4">
           <Button variant="outline" type="button" onClick={() => navigate(-1)}>
             Back
