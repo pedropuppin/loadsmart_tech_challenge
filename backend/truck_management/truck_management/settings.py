@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 """
 
-import os
 from pathlib import Path
 from decouple import config
 

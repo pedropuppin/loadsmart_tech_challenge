@@ -73,3 +73,24 @@ and a React-based front end.
 
 ## FrontEnd Installation
 
+1. **Navigate to the frontend folder:**
+```bash
+  cd frontend/truck_management
+```
+
+2. **Install dependencies:**
+```bash
+  # assuming you have node,js installed
+  npm install
+```
+
+3. **Check if you have the correct API URL configured:**
+```ini
+  # .env file
+  VITE_API_URL=http://localhost:8000/api/
+```
+
+4. **Run the development server:**
+```bash
+  npm run dev
+```
