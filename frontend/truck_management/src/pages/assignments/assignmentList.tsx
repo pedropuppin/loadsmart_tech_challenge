@@ -61,7 +61,7 @@ const AssignmentList: React.FC = () => {
         </Button>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
         {assignments.map((assignment) => (
           <AssignmentCard key={assignment.id} assignment={assignment} onDelete={handleDelete} />
         ))}
@@ -74,7 +74,7 @@ const AssignmentList: React.FC = () => {
           totalPages={totalPages}
           onPageChange={goToPage}
         />
-      </div>
+      </div>      
     </div>
   );
 };

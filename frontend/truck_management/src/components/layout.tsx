@@ -5,6 +5,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar"
+import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner"
 import { useTheme } from "@/components/theme-provider";
 import { LoadsmartLogo } from "@/components/svg/LoadsmartLogo"
@@ -36,7 +37,7 @@ const Layout: React.FC = () => {
   
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="fixed top-0 left-0 w-full z-50">
+      <div className="fixed top-0 left-0 w-full z-50 mb-6">
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger asChild>
@@ -83,10 +84,13 @@ const Layout: React.FC = () => {
           </MenubarMenu>
         </Menubar>
       </div>
-      <main className="flex-1 p-4">
+      
+      <main className="flex-1 p-4 mt-6">
         <Outlet /> {/* Renders the matched child route */}
         <Toaster />
       </main>
+      
+      <Footer />
     </div>
   );
 };
