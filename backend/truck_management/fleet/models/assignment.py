@@ -46,7 +46,8 @@ class Assignment(models.Model):
         
         if driver_license_level < truck_license_level:
             raise ValidationError("Driver's license type is not sufficient for the truck.")
-
+        
+        # finds other assignments tha contains the same driver or truck in the same date
         conflicts = Assignment.objects.exclude(pk=self.pk).filter(
             date=self.date
         ).filter(
