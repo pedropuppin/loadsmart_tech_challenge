@@ -1,4 +1,4 @@
-# Loadsmart Tech Challenge
+# Fleet Management System
 
 This project is a fleet management system that allows users to manage trucks, drivers, 
 and assignments. It provides a REST API built with Django and Django REST Framework, 
